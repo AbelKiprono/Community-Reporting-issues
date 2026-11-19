@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const prisma = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const issueRoutes = require('./routes/issueRoutes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 30 });
 app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/issues', issueRoutes);
 
 app.get('/api/health', async (req, res) => {
   try {
