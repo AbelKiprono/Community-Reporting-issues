@@ -3,7 +3,7 @@ const { computeUrgency } = require('../services/urgencyService');
 
 exports.createIssue = async (req, res, next) => {
   try {
-    const { title, description, categoryId, lat, lng, addressText, mlCategoryHint, mlUrgencyHint } = req.body;
+    const { title, description, categoryId, lat, lng, addressText, mlCategoryHint, mlUrgencyHint, imageData } = req.body;
 
     if (!title || !description) {
       return res.status(400).json({ error: 'Title and description are required' });
@@ -27,7 +27,6 @@ exports.createIssue = async (req, res, next) => {
       catId = cat.id;
     }
 
-    const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
     const urgencyScore = computeUrgency({ baseWeight, mlUrgencyHint });
 
     const issue = await prisma.issue.create({
@@ -36,7 +35,7 @@ exports.createIssue = async (req, res, next) => {
         categoryId: catId,
         title,
         description,
-        imageUrl,
+        imageUrl: imageData || null,
         lat: latNum,
         lng: lngNum,
         addressText: addressText || null,

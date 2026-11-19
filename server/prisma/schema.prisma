@@ -36,7 +36,7 @@ model Issue {
   categoryId     Int?      @map("category_id")
   title          String    @db.VarChar(150)
   description    String
-  imageUrl       String?   @map("image_url")
+   imageUrl       String?   @map("image_url") @db.Text
   lat            Float
   lng            Float
   addressText    String?   @map("address_text") @db.VarChar(255)
