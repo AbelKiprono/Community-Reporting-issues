@@ -12,13 +12,17 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401 || err.response?.status === 403) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      if (window.location.pathname !== '/login') window.location.href = '/login';
-    }
+    if (err.response?.status === 401 || err.response?.status === 403) { logout }
     return Promise.reject(err);
   }
 );
+// Build full URL for uploaded images (relative /uploads/... → http://localhost:5000/uploads/...)
+export const imageUrl = (path) => {
+  if (!path) return null;
+  if (path.startsWith('http')) return path;        // already absolute
+  if (path.startsWith('data:')) return path;       // legacy base64
+  const base = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
+  return `${base}${path}`;
+};
 
 export default api;

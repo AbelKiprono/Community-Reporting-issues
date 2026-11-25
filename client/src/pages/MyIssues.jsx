@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import api from '../api/axios';
+import api, { imageUrl } from '../api/axios';
 import { format } from 'date-fns';
 import { MapPin, Clock, ArrowRight } from 'lucide-react';
 
@@ -47,7 +47,7 @@ export default function MyIssues() {
             {/* Image Thumbnail */}
             <div className="w-full md:w-48 h-32 bg-gray-100 rounded-lg overflow-hidden shrink-0 flex items-center justify-center relative">
               {i.imageUrl ? (
-                <img src={i.imageUrl} alt={i.title} className="w-full h-full object-cover" />
+                <img src={imageUrl(i.imageUrl)} alt={i.title} className="w-full h-full object-cover" />
               ) : (
                 <span className="text-xs text-gray-400">No photo</span>
               )}
@@ -63,7 +63,10 @@ export default function MyIssues() {
                   <div>
                     <h3 className="font-bold text-gray-900 text-lg">{i.title}</h3>
                     <div className="flex items-center gap-3 text-xs text-gray-500 mt-1">
-                      <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {i.addressText || `${i.lat.toFixed(3)}, ${i.lng.toFixed(3)}`}</span>
+                      <span className="flex items-center gap-1">
+  <MapPin className="w-3 h-3" />
+  {i.addressText || (i.lat != null && i.lng != null ? `${i.lat.toFixed(3)}, ${i.lng.toFixed(3)}` : 'Location unavailable')}
+</span>
                       <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {format(new Date(i.createdAt), 'MMM d, yyyy')}</span>
                     </div>
                   </div>
